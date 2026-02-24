@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="05191e6e-b040-448c-b96f-0f24d4ee63e2" name="Changes" comment="Initialize Expo frontend project with basic setup files and dependencies&#10;Added main blank tabs&#10;Started implementing map tab" />
+    <list default="true" id="05191e6e-b040-448c-b96f-0f24d4ee63e2" name="Changes" comment="vffd">
+      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/Tabs.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/AddScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ListScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/MapScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ProfileScreen.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,13 +73,6 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RecapSpentCounter">
-    <option name="endsOfQuotaMs" value="1772614800045" />
-    <option name="spentUsd" value="0.0263633" />
-  </component>
-  <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="3" />
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -89,7 +88,7 @@
       <option name="presentableId" value="Default" />
       <updated>1771427984314</updated>
       <workItem from="1771427985321" duration="505000" />
-      <workItem from="1771428498347" duration="5655000" />
+      <workItem from="1771428498347" duration="1378000" />
     </task>
     <task id="LOCAL-00001" summary="vffd">
       <option name="closed" value="true" />
@@ -99,15 +98,7 @@
       <option name="project" value="LOCAL" />
       <updated>1771428461718</updated>
     </task>
-    <task id="LOCAL-00002" summary="Initialize Expo frontend project with basic setup files and dependencies&#10;Added main blank tabs&#10;Started implementing map tab">
-      <option name="closed" value="true" />
-      <created>1771429931089</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1771429931089</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,7 +106,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="vffd" />
-    <MESSAGE value="Initialize Expo frontend project with basic setup files and dependencies&#10;Added main blank tabs&#10;Started implementing map tab" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initialize Expo frontend project with basic setup files and dependencies&#10;Added main blank tabs&#10;Started implementing map tab" />
+    <option name="LAST_COMMIT_MESSAGE" value="vffd" />
   </component>
 </project>
