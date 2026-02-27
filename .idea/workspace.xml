@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05191e6e-b040-448c-b96f-0f24d4ee63e2" name="Changes" comment="vffd">
-      <change afterPath="$PROJECT_DIR$/frontend/src/navigation/Tabs.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/AddScreen.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ListScreen.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/MapScreen.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ProfileScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/img.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/navigation/Tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/navigation/Tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/AddScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/AddScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/MapScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/MapScreen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +36,22 @@
     &quot;assignee&quot;: &quot;mashan555&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/KamaliyaAl/Commonplace.git&quot;,
-    &quot;accountId&quot;: &quot;93101d12-3ccc-4123-a90a-f9d127973055&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/KamaliyaAl/Commonplace.git",
+    "accountId": "93101d12-3ccc-4123-a90a-f9d127973055"
+  },
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
+    },
+    "owner": "KamaliyaAl",
+    "repository": "Commonplace"
   }
-}</component>
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -60,7 +72,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "frontend/map",
+    "git-widget-placeholder": "fadeeva/new-version",
     "javascript.preferred.runtime.type.id": "node",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
@@ -73,6 +85,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecapSpentCounter">
+    <option name="endsOfQuotaMs" value="1772614800045" />
+    <option name="spentUsd" value="0.014512001" />
+  </component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="8" />
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

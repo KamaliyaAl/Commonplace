@@ -11,7 +11,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 export type BottomTabParamList = {
     Add: undefined;
     List: undefined;
-    Map: undefined;
+    Map: { date?: string } | undefined;
     Chat: undefined;
     Profile: undefined;
 };
