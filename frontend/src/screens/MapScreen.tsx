@@ -9,27 +9,19 @@ import {
     Platform,
     FlatList,
 } from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT, Region } from "react-native-maps";
+import MapView, { Marker, Callout, PROVIDER_DEFAULT, Region } from "react-native-maps";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
+import { useEvents } from "../context/EventsContext";
+import { Place, Category } from "../types";
 
-type Category = "food" | "sport" | "nature" | "culture" | "other";
 
-type Place = {
-    id: string;
-    title: string;
-    description: string;
-    rating?: number;
-    reviewsCount?: number;
-    lat: number;
-    lng: number;
-    category: Category;
-};
 
 const LIMASSOL: Region = {
     latitude: 34.7071,
     longitude: 33.0226,
-    latitudeDelta: 0.09,
-    longitudeDelta: 0.09,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
 };
 
 const CATEGORY_LABEL: Record<Category, string> = {
@@ -40,66 +32,35 @@ const CATEGORY_LABEL: Record<Category, string> = {
     other: "Other",
 };
 
+const getDaysArray = () => {
+    const days = [];
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        days.push(date.toISOString().split("T")[0]);
+    }
+    return days;
+};
+
 export default function MapScreen() {
-    const places: Place[] = useMemo(
-        () => [
-            {
-                id: "1",
-                title: "Beach Club ABOBA",
-                description: "Short description what is going on",
-                rating: 4.9,
-                reviewsCount: 101,
-                lat: 34.6816,
-                lng: 32.9995,
-                category: "food",
-            },
-            {
-                id: "2",
-                title: "Basketball Court",
-                description: "Nice public court, usually active evenings",
-                rating: 4.6,
-                reviewsCount: 32,
-                lat: 34.7009,
-                lng: 33.0412,
-                category: "sport",
-            },
-            {
-                id: "3",
-                title: "Viewpoint Spot",
-                description: "Sunset is great here",
-                rating: 4.8,
-                reviewsCount: 18,
-                lat: 34.725,
-                lng: 33.006,
-                category: "nature",
-            },
-            {
-                id: "4",
-                title: "Small Gallery",
-                description: "Local exhibitions on weekends",
-                rating: 4.5,
-                reviewsCount: 12,
-                lat: 34.7079,
-                lng: 33.0204,
-                category: "culture",
-            },
-            {
-                id: "5",
-                title: "Hidden Spot",
-                description: "Just a cool place someone marked",
-                rating: 4.2,
-                reviewsCount: 5,
-                lat: 34.712,
-                lng: 33.035,
-                category: "other",
-            },
-        ],
-        []
-    );
+    const days = useMemo(() => getDaysArray(), []);
+    const [selectedDate, setSelectedDate] = useState(days[0]);
+
+    const { events } = useEvents();
 
     const [query, setQuery] = useState("");
-    const [selectedId, setSelectedId] = useState<string | null>(places[0]?.id ?? null);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+    const route = useRoute<any>();
+    useEffect(() => {
+        const incomingDate = route?.params?.date as string | undefined;
+        if (incomingDate && days.includes(incomingDate)) {
+            setSelectedDate(incomingDate);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [route?.params?.date]);
 
     const [activeCategories, setActiveCategories] = useState<Set<Category>>(
         () => new Set<Category>(["food", "sport", "nature", "culture", "other"])
@@ -119,7 +80,8 @@ export default function MapScreen() {
 
     const filteredPlaces = useMemo(() => {
         const q = query.trim().toLowerCase();
-        return places.filter((p) => {
+        return events.filter((p) => {
+            if (p.date !== selectedDate) return false;
             if (!activeCategories.has(p.category)) return false;
             if (!q) return true;
             return (
@@ -127,7 +89,7 @@ export default function MapScreen() {
                 p.description.toLowerCase().includes(q)
             );
         });
-    }, [places, query, activeCategories]);
+    }, [events, query, activeCategories, selectedDate]);
 
     const selected = useMemo(
         () => filteredPlaces.find((p) => p.id === selectedId) ?? null,
@@ -141,6 +103,23 @@ export default function MapScreen() {
     }, [filteredPlaces, selectedId]);
 
     const categories: Category[] = ["food", "sport", "nature", "culture", "other"];
+
+    const renderCalendarDay = ({ item }: { item: string }) => {
+        const d = new Date(item);
+        const dayNum = d.getDate();
+        const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
+        const isActive = item === selectedDate;
+
+        return (
+            <Pressable
+                onPress={() => setSelectedDate(item)}
+                style={[styles.dayItem, isActive && styles.dayItemActive]}
+            >
+                <Text style={[styles.dayWeekday, isActive && styles.dayTextActive]}>{weekday}</Text>
+                <Text style={[styles.dayNumber, isActive && styles.dayTextActive]}>{dayNum}</Text>
+            </Pressable>
+        );
+    };
 
     return (
         <SafeAreaView style={styles.safe}>
@@ -166,9 +145,30 @@ export default function MapScreen() {
                                     color={selectedId === p.id ? "#FFFFFF" : "#111111"}
                                 />
                             </View>
+                            <Callout onPress={() => setSelectedId(p.id)}>
+                                <View style={{ maxWidth: 220 }}>
+                                    <Text style={{ fontWeight: "700", fontSize: 14 }}>{p.title}</Text>
+                                    <Text style={{ color: "#555", marginTop: 2 }}>{CATEGORY_LABEL[p.category]}</Text>
+                                    <Text style={{ color: "#777", marginTop: 4 }} numberOfLines={2}>
+                                        {p.description}
+                                    </Text>
+                                </View>
+                            </Callout>
                         </Marker>
                     ))}
                 </MapView>
+
+                {/* Calendar */}
+                <View style={styles.calendarContainer}>
+                    <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={days}
+                        keyExtractor={(item) => item}
+                        renderItem={renderCalendarDay}
+                        contentContainerStyle={styles.calendarList}
+                    />
+                </View>
 
                 {/* Filters button */}
                 <Pressable
@@ -219,8 +219,21 @@ export default function MapScreen() {
                 {/* Bottom card */}
                 {selected && (
                     <View style={styles.bottomCard}>
-                        <Text style={styles.cardTitle}>{selected.title}</Text>
+                        <View style={styles.cardHeader}>
+                            <Text style={styles.cardTitle}>{selected.title}</Text>
+                            <View style={styles.ratingBox}>
+                                <MaterialCommunityIcons name="star" size={14} color="#FFB800" />
+                                <Text style={styles.ratingText}>{selected.rating}</Text>
+                            </View>
+                        </View>
                         <Text style={styles.cardDesc}>{selected.description}</Text>
+                        <View style={styles.cardFooter}>
+                            <View style={styles.categoryBadge}>
+                                <Text style={styles.categoryBadgeText}>
+                                    {CATEGORY_LABEL[selected.category]}
+                                </Text>
+                            </View>
+                        </View>
                     </View>
                 )}
             </View>
@@ -244,9 +257,55 @@ const styles = StyleSheet.create({
     },
     pinActive: { backgroundColor: "#111" },
 
+    calendarContainer: {
+        position: "absolute",
+        top: Platform.OS === "ios" ? 10 : 10,
+        left: 0,
+        right: 0,
+        zIndex: 10,
+    },
+    calendarList: {
+        paddingHorizontal: 18,
+        paddingBottom: 10,
+    },
+    dayItem: {
+        width: 55,
+        height: 70,
+        backgroundColor: "#fff",
+        borderRadius: 16,
+        marginRight: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        borderWidth: 1,
+        borderColor: "#e6e6e6",
+        elevation: 4,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+    },
+    dayItemActive: {
+        backgroundColor: "#111",
+        borderColor: "#111",
+    },
+    dayWeekday: {
+        fontSize: 12,
+        color: "#6a6a6a",
+        fontWeight: "600",
+        marginBottom: 4,
+    },
+    dayNumber: {
+        fontSize: 18,
+        fontWeight: "800",
+        color: "#111",
+    },
+    dayTextActive: {
+        color: "#fff",
+    },
+
     filtersBar: {
         position: "absolute",
-        top: Platform.OS === "ios" ? 20 : 10,
+        top: Platform.OS === "ios" ? 100 : 90,
         left: 18,
         right: 18,
         height: 50,
@@ -256,17 +315,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 16,
         justifyContent: "space-between",
+        zIndex: 5,
     },
     filtersText: { fontSize: 18, fontWeight: "800" },
 
     filtersPanel: {
         position: "absolute",
-        top: Platform.OS === "ios" ? 80 : 70,
+        top: Platform.OS === "ios" ? 160 : 150,
         left: 18,
         right: 18,
         padding: 12,
         borderRadius: 16,
         backgroundColor: "rgba(255,255,255,0.95)",
+        zIndex: 10,
     },
 
     chipsWrap: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
@@ -288,7 +349,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 18,
         right: 18,
-        bottom: 100,
+        bottom: 40,
         height: 50,
         borderRadius: 16,
         backgroundColor: "#fff",
@@ -297,6 +358,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         borderWidth: 1,
         borderColor: "#e6e6e6",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     searchInput: { flex: 1, fontSize: 16 },
 
@@ -304,11 +370,52 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 18,
         right: 18,
-        bottom: 160,
-        padding: 14,
-        borderRadius: 16,
-        backgroundColor: "#E6E6E6",
+        bottom: 105,
+        padding: 16,
+        borderRadius: 20,
+        backgroundColor: "#fff",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+        elevation: 5,
     },
-    cardTitle: { fontSize: 16, fontWeight: "900" },
-    cardDesc: { marginTop: 4, fontSize: 13 },
+    cardHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 6,
+    },
+    cardTitle: { fontSize: 18, fontWeight: "900", color: "#111" },
+    ratingBox: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#FFF9E6",
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 6,
+    },
+    ratingText: {
+        marginLeft: 4,
+        fontSize: 12,
+        fontWeight: "700",
+        color: "#FFB800",
+    },
+    cardDesc: { fontSize: 14, color: "#444", lineHeight: 20 },
+    cardFooter: {
+        marginTop: 12,
+        flexDirection: "row",
+    },
+    categoryBadge: {
+        backgroundColor: "#F2F2F2",
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 8,
+    },
+    categoryBadgeText: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#666",
+        textTransform: "uppercase",
+    },
 });
