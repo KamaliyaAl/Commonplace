@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AddScreen from "../screens/AddScreen";
-import ListScreen from "../screens/ListScreen";
+import ListStack from "../screens/ListStack";
 import MapScreen from "../screens/MapScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
@@ -71,7 +71,7 @@ export default function Tabs() {
             })}
         >
             <Tab.Screen name="Add" component={AddScreen} />
-            <Tab.Screen name="List" component={ListScreen} />
+            <Tab.Screen name="List" component={ListStack} />
             <Tab.Screen name="Map" component={MapScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
